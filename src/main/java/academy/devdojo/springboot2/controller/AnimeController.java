@@ -1,6 +1,7 @@
 package academy.devdojo.springboot2.controller;
 
 import academy.devdojo.springboot2.domain.Anime;
+import academy.devdojo.springboot2.service.AnimesService;
 import academy.devdojo.springboot2.util.DateUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -14,16 +15,15 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @Log4j2
-@RequestMapping("anime")
+@RequestMapping("animes")
 public class AnimeController {
+    private final DateUtil dateUtil;
+    private final AnimesService animesService;
 
-    private DateUtil dateUtil;
-
-    // Está basicamente dizendo que o caminho é localhost:8080/anime/list
-
-    @GetMapping(path = "list")
+    @GetMapping
     public List<Anime> list () {
         log.info(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()));
-        return List.of(new Anime("Naruto"),new Anime("DBZ"));
+        return animesService.listAll();
     }
+
 }
