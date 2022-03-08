@@ -42,5 +42,5 @@ public class AnimesService {
         delete(anime.getId());
         animes.add(anime);
     }
-    
+
 }
