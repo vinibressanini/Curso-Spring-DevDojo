@@ -42,4 +42,10 @@ public class AnimeController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PutMapping
+    public ResponseEntity<Anime> replace(@RequestBody Anime anime) {
+        animesService.replace(anime);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }
