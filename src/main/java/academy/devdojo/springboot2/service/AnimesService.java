@@ -18,8 +18,14 @@ public class AnimesService {
 
     private final AnimeRepository animeRepository;
 
-    public List<Anime> listAll() {
+    public List<Anime> listAll()
+    {
         return animeRepository.findAll();
+    }
+
+    public List<Anime> findByName(String name)
+    {
+        return animeRepository.findByName(name);
     }
 
     public Anime findByIdOrThrowBadRequestException(long id) {
