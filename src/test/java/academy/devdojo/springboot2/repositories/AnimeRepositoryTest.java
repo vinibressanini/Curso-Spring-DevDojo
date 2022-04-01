@@ -12,8 +12,6 @@ import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @DataJpaTest
 @DisplayName("Tests for Anime Repository")
 class AnimeRepositoryTest {
