@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class AnimesService {
+public class AnimeService {
 
     private final AnimeRepository animeRepository;
 

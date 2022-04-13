@@ -26,10 +26,10 @@ import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
 @DisplayName("Tests For Anime Services")
-class AnimesServiceTest {
+class AnimeServiceTest {
 
     @InjectMocks
-    private AnimesService animesService;
+    private AnimeService animeService;
 
     @Mock
     private AnimeRepository animeRepositoryMock;
@@ -60,7 +60,7 @@ class AnimesServiceTest {
     void listAll_ReturnsListOfAnimesInsidePageObject_WhenSuccessful() {
 
         String expectedName = AnimeCreator.createValidAnime().getName();
-        Page<Anime> animePage = animesService.listAll(PageRequest.of(1, 1));
+        Page<Anime> animePage = animeService.listAll(PageRequest.of(1, 1));
 
         Assertions.assertThat(animePage).isNotNull()
                 .hasSize(1);
@@ -77,7 +77,7 @@ class AnimesServiceTest {
     void listAllNonPageable_ReturnsListOfAnimes_WhenSuccessful() {
 
         String expectedName = AnimeCreator.createValidAnime().getName();
-        List<Anime> animes = animesService.listAllNonPageable();
+        List<Anime> animes = animeService.listAllNonPageable();
 
         Assertions.assertThat(animes).isNotNull()
                 .isNotEmpty()
@@ -94,7 +94,7 @@ class AnimesServiceTest {
 
         Long expectedId = AnimeCreator.createValidAnime().getId();
 
-        Anime anime = animesService.findByIdOrThrowBadRequestException(1);
+        Anime anime = animeService.findByIdOrThrowBadRequestException(1);
 
         Assertions.assertThat(anime).isNotNull();
 
@@ -107,7 +107,7 @@ class AnimesServiceTest {
     void findByName_ReturnsListOfAnimes_WhenSuccessful() {
 
         String expectedName = AnimeCreator.createValidAnime().getName();
-        List<Anime> animes = animesService.findByName("animes");
+        List<Anime> animes = animeService.findByName("animes");
 
         Assertions.assertThat(animes).isNotNull()
                 .isNotEmpty()
@@ -124,7 +124,7 @@ class AnimesServiceTest {
         BDDMockito.when(animeRepositoryMock.findByName(ArgumentMatchers.anyString()))
                 .thenReturn(Collections.emptyList());
 
-        List<Anime> animes = animesService.findByName("animes");
+        List<Anime> animes = animeService.findByName("animes");
 
         Assertions.assertThat(animes).isNotNull()
                 .isEmpty();
@@ -137,7 +137,7 @@ class AnimesServiceTest {
 
         Long expectedId = AnimeCreator.createValidAnime().getId();
 
-        Anime anime = animesService.save(AnimePostRequestBodyCreator.createAnimePostRequestBody());
+        Anime anime = animeService.save(AnimePostRequestBodyCreator.createAnimePostRequestBody());
 
         Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);
 
@@ -148,7 +148,7 @@ class AnimesServiceTest {
     void replace_UpdatesAnime_WhenSuccessful() {
 
 
-        Assertions.assertThatCode(() -> animesService.replace(AnimePutRequestBodyCreator.createAnimePutRequestBody())
+        Assertions.assertThatCode(() -> animeService.replace(AnimePutRequestBodyCreator.createAnimePutRequestBody())
         ).doesNotThrowAnyException();
 
     }
@@ -158,7 +158,7 @@ class AnimesServiceTest {
     void delete_RemovesAnime_WhenSuccessful() {
 
 
-        Assertions.assertThatCode(() -> animesService.delete(1)).doesNotThrowAnyException();
+        Assertions.assertThatCode(() -> animeService.delete(1)).doesNotThrowAnyException();
 
     }
 
@@ -169,7 +169,7 @@ class AnimesServiceTest {
         BDDMockito.when(animeRepositoryMock.findById(ArgumentMatchers.anyLong()))
                 .thenReturn(Optional.empty());
 
-        Assertions.assertThatThrownBy(() -> animesService.findByIdOrThrowBadRequestException(1))
+        Assertions.assertThatThrownBy(() -> animeService.findByIdOrThrowBadRequestException(1))
                 .isInstanceOf(BadRequestException.class);
 
     }

@@ -3,7 +3,7 @@ package academy.devdojo.springboot2.controller;
 import academy.devdojo.springboot2.domain.Anime;
 import academy.devdojo.springboot2.requests.AnimePostRequestBody;
 import academy.devdojo.springboot2.requests.AnimePutRequestBody;
-import academy.devdojo.springboot2.service.AnimesService;
+import academy.devdojo.springboot2.service.AnimeService;
 import academy.devdojo.springboot2.util.AnimeCreator;
 import academy.devdojo.springboot2.util.AnimePostRequestBodyCreator;
 import academy.devdojo.springboot2.util.AnimePutRequestBodyCreator;
@@ -33,29 +33,29 @@ class AnimeControllerTest {
     private AnimeController animeController;
 
     @Mock
-    private AnimesService animesServiceMock;
+    private AnimeService animeServiceMock;
 
     @BeforeEach
     void setUp () {
         PageImpl<Anime> animePage = new PageImpl<>(List.of(AnimeCreator.createValidAnime()));
-        BDDMockito.when(animesServiceMock.listAll(ArgumentMatchers.any()))
+        BDDMockito.when(animeServiceMock.listAll(ArgumentMatchers.any()))
                 .thenReturn(animePage);
 
-        BDDMockito.when(animesServiceMock.listAllNonPageable())
+        BDDMockito.when(animeServiceMock.listAllNonPageable())
                 .thenReturn(List.of(AnimeCreator.createValidAnime()));
 
-        BDDMockito.when(animesServiceMock.findByIdOrThrowBadRequestException(ArgumentMatchers.anyLong()))
+        BDDMockito.when(animeServiceMock.findByIdOrThrowBadRequestException(ArgumentMatchers.anyLong()))
                 .thenReturn(AnimeCreator.createValidAnime());
 
-        BDDMockito.when(animesServiceMock.findByName(ArgumentMatchers.anyString()))
+        BDDMockito.when(animeServiceMock.findByName(ArgumentMatchers.anyString()))
                 .thenReturn(List.of(AnimeCreator.createValidAnime()));
 
-        BDDMockito.when(animesServiceMock.save(ArgumentMatchers.any(AnimePostRequestBody.class)))
+        BDDMockito.when(animeServiceMock.save(ArgumentMatchers.any(AnimePostRequestBody.class)))
                 .thenReturn(AnimeCreator.createValidAnime());
 
-        BDDMockito.doNothing().when(animesServiceMock).replace(ArgumentMatchers.any(AnimePutRequestBody.class));
+        BDDMockito.doNothing().when(animeServiceMock).replace(ArgumentMatchers.any(AnimePutRequestBody.class));
 
-        BDDMockito.doNothing().when(animesServiceMock).delete(ArgumentMatchers.anyLong());
+        BDDMockito.doNothing().when(animeServiceMock).delete(ArgumentMatchers.anyLong());
     }
 
     @Test
@@ -80,7 +80,7 @@ class AnimeControllerTest {
     void listAll_ReturnsListOfAnimes_WhenSuccessful() {
 
         String expectedName = AnimeCreator.createValidAnime().getName();
-        List<Anime> animes = animeController.list().getBody();
+        List<Anime> animes = animeController.listAll().getBody();
 
         Assertions.assertThat(animes).isNotNull()
                 .isNotEmpty()
@@ -124,7 +124,7 @@ class AnimeControllerTest {
     @DisplayName("findByName Return an Empty List of Animes When Anime is Not Found")
     void findByName_ReturnsAnEmptyListOfAnimes_WhenAnimeIsNotFound() {
 
-        BDDMockito.when(animesServiceMock.findByName(ArgumentMatchers.anyString()))
+        BDDMockito.when(animeServiceMock.findByName(ArgumentMatchers.anyString()))
                 .thenReturn(Collections.emptyList());
 
         List<Anime> animes = animeController.findByName("animes").getBody();

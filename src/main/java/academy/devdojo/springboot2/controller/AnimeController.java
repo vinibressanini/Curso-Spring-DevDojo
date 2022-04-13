@@ -3,7 +3,7 @@ package academy.devdojo.springboot2.controller;
 import academy.devdojo.springboot2.domain.Anime;
 import academy.devdojo.springboot2.requests.AnimePostRequestBody;
 import academy.devdojo.springboot2.requests.AnimePutRequestBody;
-import academy.devdojo.springboot2.service.AnimesService;
+import academy.devdojo.springboot2.service.AnimeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -23,7 +23,7 @@ import java.util.List;
 @Log4j2
 @RequiredArgsConstructor
 public class AnimeController {
-    private final AnimesService animeService;
+    private final AnimeService animeService;
 
     @GetMapping
     public ResponseEntity<Page<Anime>> list(Pageable pageable) {
@@ -31,7 +31,7 @@ public class AnimeController {
     }
 
     @GetMapping(path = "/all")
-    public ResponseEntity<List<Anime>> list() {
+    public ResponseEntity<List<Anime>> listAll() {
         return ResponseEntity.ok(animeService.listAllNonPageable());
     }
 
@@ -41,14 +41,15 @@ public class AnimeController {
     }
 
     @GetMapping(path = "by-id/{id}")
-    public ResponseEntity<Anime> findById(@PathVariable long id, @AuthenticationPrincipal UserDetails userDetails) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Anime> findByIdAuthenticationPrincipal(@PathVariable long id,
+                                                                 @AuthenticationPrincipal UserDetails userDetails) {
         log.info(userDetails);
         return ResponseEntity.ok(animeService.findByIdOrThrowBadRequestException(id));
     }
 
-    //localhost:8080/animes/find?name="nomeDoAnime"
     @GetMapping(path = "/find")
-    public ResponseEntity <List<Anime>> findByName(@RequestParam String name) {
+    public ResponseEntity<List<Anime>> findByName(@RequestParam String name) {
         return ResponseEntity.ok(animeService.findByName(name));
     }
 
